@@ -58,7 +58,8 @@ for dev_str in parts:
     if extracted_title in content:
         content = content.replace(extracted_title, '', 1).strip()
         
-    # Final pass to remove hanging punctuation like `. `, `) `, `- `
+    # Final pass to remove hanging punctuation and Markdown artifacts
+    content = content.replace('**', '').replace('Versículo Principal:', '').strip()
     content = content.lstrip(' .)-').strip()
     
     parsed.append({
