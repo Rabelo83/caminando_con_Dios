@@ -13,7 +13,8 @@ const DOM = {
   btnPrev: document.getElementById('btn-prev'),
   btnNext: document.getElementById('btn-next'),
   indexList: document.getElementById('index-list'),
-  progressFill: document.getElementById('progress-fill')
+  progressFill: document.getElementById('progress-fill'),
+  scrollWrapper: document.querySelector('.devotional-scroll-wrapper')
 };
 
 // ─── INIT ────────────────────────────────────────────────────────────────────
@@ -159,6 +160,8 @@ function renderCurrentDay(animClass = 'animate-content') {
       ${formatContent(dev.content)}
     </div>
   `;
+
+  if (DOM.scrollWrapper) DOM.scrollWrapper.scrollTop = 0;
 
   // Update controls
   DOM.btnPrev.disabled = currentDayIndex === 0;
