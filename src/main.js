@@ -12,7 +12,8 @@ const DOM = {
   streakCount: document.getElementById('streak-count'),
   btnPrev: document.getElementById('btn-prev'),
   btnNext: document.getElementById('btn-next'),
-  indexList: document.getElementById('index-list')
+  indexList: document.getElementById('index-list'),
+  progressFill: document.getElementById('progress-fill')
 };
 
 async function init() {
@@ -72,7 +73,6 @@ function setupEventListeners() {
 }
 
 function formatContent(text) {
-  // Convert newlines to paragraphs
   return text.split('\n').filter(p => p.trim()).map(p => `<p>${p}</p>`).join('');
 }
 
@@ -81,11 +81,16 @@ function renderCurrentDay() {
   
   const dev = devocionales[currentDayIndex];
   
+  // Re-trigger entrance animation
+  DOM.devoContainer.classList.remove('animate-content');
+  void DOM.devoContainer.offsetWidth; // force reflow
+  DOM.devoContainer.classList.add('animate-content');
+
   // Render card
   DOM.devoContainer.innerHTML = `
     <span class="ref-badge">Día ${dev.id}</span>
     <div class="devo-content">
-      <p style="color: var(--clr-gold); font-weight:700; font-family: var(--font-sans); text-transform: uppercase; font-size:0.85rem; letter-spacing:0.05em; margin-bottom:1rem">${dev.reference}</p>
+      <span class="bible-ref">${dev.reference}</span>
       ${formatContent(dev.content)}
     </div>
   `;
@@ -94,9 +99,13 @@ function renderCurrentDay() {
   DOM.btnPrev.disabled = currentDayIndex === 0;
   
   const isLast = currentDayIndex === devocionales.length - 1;
-  DOM.btnNext.innerHTML = isLast ? 'Completado ✓' : 'Siguiente →';
+  DOM.btnNext.innerHTML = isLast ? 'Completado ✓' : `Siguiente <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>`;
   
   DOM.streakCount.textContent = `Día ${currentDayIndex + 1} de ${devocionales.length}`;
+  
+  // Update visual progress bar
+  const progressPercent = ((currentDayIndex + 1) / devocionales.length) * 100;
+  if (DOM.progressFill) DOM.progressFill.style.width = `${progressPercent}%`;
 }
 
 function showIndex() {
@@ -110,11 +119,11 @@ function showIndex() {
     
     let statusHTML = '';
     if (isCompleted) statusHTML = '<span class="index-status">✓</span>';
-    else if (isCurrent) statusHTML = '<span class="index-status" style="opacity:0.6">▶</span>';
+    else if (isCurrent) statusHTML = '<span class="index-status" style="opacity:0.6; background:transparent; border: 1px solid var(--clr-gold)">▶</span>';
     
     return `
       <div class="index-card glass-panel ${isCompleted ? 'completed' : ''}" data-idx="${idx}">
-        <div style="flex:1; min-width:0">
+        <div style="flex:1; min-width:0; padding-right:1rem;">
           <h4 class="index-card-title">Día ${dev.id}</h4>
           <p class="index-card-preview">${dev.reference}</p>
         </div>
@@ -137,6 +146,11 @@ function showIndex() {
 function showDaily() {
   DOM.viewIndex.classList.add('hidden');
   DOM.viewDaily.classList.remove('hidden');
+  
+  // Quick re-trigger to ensure it looks fancy when coming back
+  DOM.devoContainer.classList.remove('animate-content');
+  void DOM.devoContainer.offsetWidth; 
+  DOM.devoContainer.classList.add('animate-content');
 }
 
 // Boot
