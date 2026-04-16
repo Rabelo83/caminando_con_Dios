@@ -1,0 +1,17 @@
+{
+  "name": "Caminando con Dios",
+  "short_name": "Devocional",
+  "description": "Un devocional diario para edificar tu vida.",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#0B0F19",
+  "theme_color": "#0B0F19",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/caminando_con_dios_icon.png",
+      "sizes": "1024x1024",
+      "type": "image/png"
+    }
+  ]
+}
