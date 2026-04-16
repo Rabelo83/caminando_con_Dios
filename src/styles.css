@@ -457,3 +457,29 @@ body {
 .animate-content {
   animation: fadeContent 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+/* --- Footer --- */
+.app-footer {
+  margin-top: 2.5rem;
+  padding: 2rem 0 1rem;
+  text-align: center;
+  border-top: 1px solid var(--clr-border);
+}
+.app-footer p {
+  color: var(--clr-text-muted);
+  font-size: 0.95rem;
+  margin-bottom: 0.4rem;
+}
+.app-footer strong {
+  color: var(--clr-gold);
+  font-weight: 500;
+}
+.app-footer a {
+  color: var(--clr-text-muted);
+  text-decoration: none;
+  transition: var(--transition);
+}
+.app-footer a:hover {
+  color: var(--clr-gold);
+  text-shadow: 0 0 10px var(--clr-gold-glow);
+}
