@@ -43,40 +43,40 @@
     </header>
 
     <!-- Main Content Area -->
-    <main id="main-content" class="content-area fade-in-up">
+    <main id="main-content" class="content-area fade-in-up" role="main">
       <!-- Devotional View -->
-      <article id="view-daily" class="view active">
+      <article id="view-daily" class="view active" role="region" aria-label="Devocional Diario">
         <div class="devotional-scroll-wrapper">
-           <div class="devotional-card glass-panel" id="devotional-container">
+           <div class="devotional-card glass-panel" id="devotional-container" aria-live="polite">
              <div class="skeleton-loader font-playfair" style="opacity:0.5;">Cargando revelación...</div>
            </div>
         </div>
         
-        <div class="bottom-dock glass-panel fade-in-up delay-2">
-          <button id="btn-prev" class="btn-icon circle-btn" disabled aria-label="Anterior">
-            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg>
+        <div class="bottom-dock glass-panel fade-in-up delay-2" role="navigation" aria-label="Controles del Devocional">
+          <button id="btn-prev" class="btn-icon circle-btn" disabled aria-label="Devocional Anterior">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg>
           </button>
           <div class="streak-wrapper">
-            <div class="streak-indicator">
-              <span class="streak-icon">✨</span>
+            <div class="streak-indicator" aria-live="polite">
+              <span class="streak-icon" aria-hidden="true">✨</span>
               <span id="streak-count" class="font-outfit">Día 1</span>
             </div>
-            <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-fill"></div></div>
+            <div class="progress-bar-bg" aria-hidden="true"><div class="progress-bar-fill" id="progress-fill"></div></div>
           </div>
-          <button id="btn-next" class="btn-primary pill-btn">
+          <button id="btn-next" class="btn-primary pill-btn" aria-label="Siguiente Devocional">
             Siguiente
-            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
           </button>
         </div>
       </article>
 
       <!-- Index View -->
-      <section id="view-index" class="view hidden">
+      <section id="view-index" class="view hidden" role="region" aria-label="Índice de Devocionales">
         <div class="index-header glass-panel sticky-header">
           <h2 class="font-playfair">El Viaje</h2>
-          <button class="btn-ghost pill-btn" id="btn-back-daily">Regresar</button>
+          <button class="btn-ghost pill-btn" id="btn-back-daily" aria-label="Regresar al devocional actual">Regresar</button>
         </div>
-        <div id="index-list" class="index-grid">
+        <div id="index-list" class="index-grid" role="list">
            <!-- Populated by JS -->
         </div>
       </section>

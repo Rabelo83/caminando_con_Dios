@@ -48,28 +48,60 @@ async function fetchDevocionales() {
   }
 }
 
+let touchStartX = 0;
+let touchEndX = 0;
+
 function setupEventListeners() {
   DOM.btnIndex.addEventListener('click', showIndex);
   DOM.btnBackDaily.addEventListener('click', showDaily);
   
-  DOM.btnPrev.addEventListener('click', () => {
-    if (currentDayIndex > 0) {
-      currentDayIndex--;
-      saveState();
-      renderCurrentDay();
+  DOM.btnPrev.addEventListener('click', goToPrev);
+  DOM.btnNext.addEventListener('click', goToNext);
+  
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (DOM.viewIndex.classList.contains('hidden')) {
+      if (e.key === 'ArrowLeft') goToPrev();
+      if (e.key === 'ArrowRight') goToNext();
     }
   });
-  
-  DOM.btnNext.addEventListener('click', () => {
-    // Mark current as complete
-    completedDays.add(currentDayIndex);
-    
-    if (currentDayIndex < devocionales.length - 1) {
-      currentDayIndex++;
-    }
+
+  // Swipe navigation
+  DOM.viewDaily.addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].screenX;
+  }, { passive: true });
+
+  DOM.viewDaily.addEventListener('touchend', e => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+  }, { passive: true });
+}
+
+function handleSwipe() {
+  const swipeThreshold = 50;
+  if (touchEndX < touchStartX - swipeThreshold) {
+    goToNext(); // Swipe left
+  }
+  if (touchEndX > touchStartX + swipeThreshold) {
+    goToPrev(); // Swipe right
+  }
+}
+
+function goToPrev() {
+  if (currentDayIndex > 0) {
+    currentDayIndex--;
     saveState();
     renderCurrentDay();
-  });
+  }
+}
+
+function goToNext() {
+  completedDays.add(currentDayIndex);
+  if (currentDayIndex < devocionales.length - 1) {
+    currentDayIndex++;
+  }
+  saveState();
+  renderCurrentDay();
 }
 
 function formatContent(text) {
