@@ -1,4 +1,4 @@
-const CACHE_NAME = 'caminando-v1';
+const CACHE_NAME = 'caminando-v2';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -6,7 +6,8 @@ const ASSETS_TO_CACHE = [
   './src/styles.css',
   './src/main.js',
   './data/devocionales.json',
-  './caminando_con_dios_icon.png'
+  './caminando_con_dios_icon.png',
+  './src/bg.jpg'
 ];
 
 self.addEventListener('install', (event) => {
