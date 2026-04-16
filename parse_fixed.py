@@ -26,44 +26,44 @@ for dev_str in parts:
         if not dev_str: continue
 
     lines = dev_str.split('\n')
-    extracted_title = lines[0].strip()
+    extracted_title = ""
     
-    # Find the bible reference to use as title
-    for line in lines[:5]:
-        if re.search(r'\d{1,3}:\d+', line) or "NTV" in line.upper() or "NVI" in line.upper():
-            extracted_title = line.strip()
-            # Truncate correctly to extract only the reference
-            ntv_idx = extracted_title.upper().find('NTV')
-            if ntv_idx == -1:
-                ntv_idx = extracted_title.upper().find('NVI')
-                
-            if ntv_idx != -1:
-                match = re.search(r'NTV[).]?', extracted_title[ntv_idx:ntv_idx+5], re.IGNORECASE)
-                if match:
-                    extracted_title = extracted_title[:ntv_idx + len(match.group())].strip()
-                else:
-                    extracted_title = extracted_title[:ntv_idx+3].strip()
-            elif len(extracted_title) > 80:
-                period_idx = extracted_title.find('.')
-                if period_idx != -1 and period_idx < 80:
-                    extracted_title = extracted_title[:period_idx+1].strip()
-                else:
-                    extracted_title = extracted_title[:77].strip() + "..."
+    # Strict regex for pulling Bible references like "Hechos 5:3-4 NTV" or "(Gn 32:22-32 NTV)."
+    pattern = r'([1-3]?\s?[A-Za-zñáéíóú]+\s+\d{1,3}[:.]\d+(?:[\-–]\d+)?(?:[a-z])?\s*(?:\([A-Za-z]+\)|NTV|NVI|RVR(?:1960)?)?\w*)'
+    
+    for line in lines[:15]:
+        m = re.search(pattern, line, re.IGNORECASE)
+        if m:
+            extracted_title = m.group(1).strip()
+            # If the literal word "NTV" or "NVI" is directly in the original line, try to grab its closing dot/parenthesis too
+            extra_idx = line.find(extracted_title) + len(extracted_title)
+            if extra_idx < len(line) and line[extra_idx] in [')', '.']:
+                extracted_title = line[line.find(extracted_title) : extra_idx + 1]
             break
+
+    # If no match found, fallback to the first line (capped)
+    if not extracted_title:
+        extracted_title = lines[0].strip()
+        if len(extracted_title) > 80:
+            extracted_title = extracted_title[:77] + "..."
             
-    # Clean up the reference string specifically
-    extracted_title = extracted_title.replace('**', '').replace('Versículo Principal:', '').strip()
-    if extracted_title.startswith('- '):
-        extracted_title = extracted_title[2:]
+    # Clean up markdown formatting if any
+    clean_title = extracted_title.replace('**', '').replace('Versículo Principal:', '').strip()
+    if clean_title.startswith('- '):
+        clean_title = clean_title[2:]
+    clean_title = clean_title.strip(" )")
         
     # The content is the full devotional MINUS the extracted_title portion
     content = dev_str
     if extracted_title in content:
         content = content.replace(extracted_title, '', 1).strip()
+        
+    # Final pass to remove hanging punctuation like `. `, `) `, `- `
+    content = content.lstrip(' .)-').strip()
     
     parsed.append({
         "id": len(parsed) + 1,
-        "reference": extracted_title,
+        "reference": clean_title,
         "content": content
     })
 
